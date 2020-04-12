@@ -18,6 +18,12 @@
 " hope. At least, it works for me. ;-)
 " }}}
 function! s:Ruby_Matchit()
+  let word_map = [
+        \"unless", "elsif", "else", "case", "when", "while",
+        \"until", "def", "module", "class", "resource", "helpers", "namespace",
+        \"event", "before", "after", "params", "post", "get", "put", "route_param"
+        \]
+  let l:mappings = join(map(word_map, '"|" . v:val . "\\"'), '')
 
     " use default matching for parenthesis, brackets and braces:
     if strpart(getline("."), col(".")-1, 1) =~ '(\|)\|{\|}\|\[\|\]'
@@ -46,8 +52,7 @@ function! s:Ruby_Matchit()
 		break
 	    endif
 	endwhile
-    elseif curr_word =~ '\<\(if\|unless\|elsif\|else\|case\|when\|while\|'
-		\.'until\|def\|\|module\|class\)\>'
+    elseif curr_word =~ '\<\(if\' . mappings . ')\>'
 	while 1
 	    normal j
 	    if strlen(matchstr(getline("."), "^\\s*")) == spaces
